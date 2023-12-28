@@ -8,9 +8,9 @@ import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-rou
 
  
 function App() {
-  const [mode, setMode] = useState('light'); // Whether dark mode is enabled or not
+  const [mode, setMode] = useState('light');
+  const [isDark, SetIsDark] = useState('light');
   const [alert, setAlert] = useState(null);
-
   const showAlert = (message, type)=>{
       setAlert({
         msg: message,
@@ -21,38 +21,44 @@ function App() {
       }, 1500);
   }
 
-  const toggleMode = ()=>{
-    if(mode === 'light'){
+  const toggleMode = (cls)=>{
+    console.log(cls)
+    if(cls === 'reddish') {
+      setMode('reddish');
+      document.body.style.backgroundColor = 'rgb(255, 112, 67)'
+    }
+    else if(cls === 'greenish') {
+      setMode('greenish')
+      document.body.style.backgroundColor = 'rgb(76, 175, 80)';
+    }
+    else if(cls === 'yellowish') {
+      setMode('yellowish')
+      document.body.style.backgroundColor = 'rgb(255, 213, 79)'
+    }
+    else if(cls === 'light') {
       setMode('dark');
+      SetIsDark('dark');
       document.body.style.backgroundColor = '#042743';
       showAlert("Dark mode has been enabled", "success");
       document.title = 'TextUtils - Dark Mode';
-      // setInterval(() => {
-      //   document.title = 'TextUtils is Amazing Mode';
-      // }, 2000);
-      // setInterval(() => {
-      //   document.title = 'Install TextUtils Now';
-      // }, 1500);
     }
-    else{
+    else {
       setMode('light');
+      SetIsDark('light');
       document.body.style.backgroundColor = 'white';
       showAlert("Light mode has been enabled", "success");
       document.title = 'TextUtils - Light Mode';
     }
   }
+
   return (
     <>
-    {/* <Navbar title="TextUtils" aboutText="About TextUtils" /> */}
-    {/* <Navbar/> */}
     <BrowserRouter>
-    <Navbar title="TextUtils" mode={mode} toggleMode={toggleMode} />
+    <Navbar title="TextUtils" mode={mode} isDark={isDark} toggleMode={toggleMode} />
     <Alert alert={alert}/>
     <div className="container my-3">
     <Routes>
-    {/* /users --> Component 1
-        /users/home --> Component 2 */}
-          <Route exact path="/about" element={<About />}></Route>
+          <Route exact path="/about" element={<About mode={mode}/>}></Route>
           <Route exact path="/" 
           element={<TextForm showAlert={showAlert} heading="Enter the text to analyze below" mode={mode}/>}>  
           </Route>
